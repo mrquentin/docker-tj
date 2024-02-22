@@ -27,4 +27,4 @@ if [[ -n "$JVM_OPTS" ]]; then
 	for j in ${JVM_OPTS}; do sed -i '$a\'$j'' user_jvm_args.txt; done
 fi
 
-java -jar @user_jvm_args.txt "forge-${forge_version}.jar" --nogui
+java @user_jvm_args.txt -jar "forge-${forge_version}.jar" --nogui
