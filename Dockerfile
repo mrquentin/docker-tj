@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install -y curl unzip jq && \
  adduser --uid 99 --gid 100 --home /data --disabled-password minecraft
 
 COPY launch.sh /launch.sh
-COPY server-file-info.json /server-file-info.json
+COPY pack-info.json /pack-info.json
 COPY user_jvm_args.txt /data/user_jvm_args.txt
 RUN chmod +x /launch.sh
 
