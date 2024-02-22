@@ -9,7 +9,6 @@ RUN apt-get update && apt-get install -y curl unzip jq && \
 
 COPY launch.sh /launch.sh
 COPY pack-info.json /pack-info.json
-COPY user_jvm_args.txt /data/user_jvm_args.txt
 RUN chmod +x /launch.sh
 
 USER minecraft

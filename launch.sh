@@ -22,9 +22,4 @@ if ! [[ -f "Server-Files-$PROJECT_VERSION.zip" ]]; then
   java -jar "forge-${forge_version}-installer.jar" --installServer
 fi
 
-if [[ -n "$JVM_OPTS" ]]; then
-	sed -i '/-Xm[s,x]/d' user_jvm_args.txt
-	for j in ${JVM_OPTS}; do sed -i '$a\'$j'' user_jvm_args.txt; done
-fi
-
-java @user_jvm_args.txt -jar "forge-${forge_version}.jar" --nogui
+java $JVM_OPTS -jar "forge-${forge_version}.jar" --nogui
