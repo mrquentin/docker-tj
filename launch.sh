@@ -29,17 +29,17 @@ if ! [[ -f "Server-Files-$PROJECT_VERSION.zip" ]]; then
   rm -fr rm config resources libraries scripts tmp mods Server*.zip minecraft_server* forge*
 
   # Get and install Forge
-  curl -Lo "forge-${forgeVersion}-installer.jar" "$forgeUrl"
+  curl -Lo "/data/forge-${forgeVersion}-installer.jar" "$forgeUrl"
   java -jar "forge-${forgeVersion}-installer.jar" --installServer
 
   # Get pack files
-  curl -Lo "Server-Files-$PROJECT_VERSION.zip" "$packUrl" || exit 9
-  unzip -u -o "Server-Files-$PROJECT_VERSION.zip" -d ./tmp
-  mv ./tmp/overrides/* .
+  curl -Lo "/data/Server-Files-$PROJECT_VERSION.zip" "$packUrl" || exit 9
+  unzip -u -o "Server-Files-$PROJECT_VERSION.zip" -d /data/tmp
+  mv /data/tmp/overrides/* .
 
   # Download all mods
   for modUrl in $(jq -r '.modUrls[]' "$packInfoPath"); do
-    curl -L "$modUrl" -o "./mods/${modUrl##*/}";
+    curl -L "$modUrl" -o "/data/mods/${modUrl##*/}";
   done
 fi
 
