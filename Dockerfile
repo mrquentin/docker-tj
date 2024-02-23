@@ -12,7 +12,6 @@ RUN apt-get update && apt-get install -y curl unzip jq
 
 WORKDIR /build
 
-COPY pack-info.json .
 COPY prepare.sh .
 
 RUN chmod +x ./prepare.sh
