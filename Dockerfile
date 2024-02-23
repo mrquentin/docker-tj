@@ -31,8 +31,8 @@ RUN apt-get update && apt-get install -y curl unzip jq && \
  adduser --uid 99 --gid 100 --home /data --disabled-password minecraft
 
 COPY --from=builder /pack-info.json /pack-info.json
-COPY launch.sh /launch.sh
-RUN chmod +x /launch.sh
+COPY launch.sh /data/launch.sh
+RUN chmod +x /data/launch.sh
 
 USER minecraft
 
@@ -43,4 +43,4 @@ WORKDIR /data
 
 EXPOSE 25565/tcp
 
-CMD ["/launch.sh"]
+CMD ["/data/launch.sh"]

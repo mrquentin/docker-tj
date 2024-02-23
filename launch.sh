@@ -35,7 +35,7 @@ if ! [[ -f "Server-Files-$PROJECT_VERSION.zip" ]]; then
   # Get pack files
   curl -Lo "/data/Server-Files-$PROJECT_VERSION.zip" "$packUrl" || exit 9
   unzip -u -o "Server-Files-$PROJECT_VERSION.zip" -d /data/tmp
-  mv /data/tmp/overrides/* .
+  mv /data/tmp/overrides/* /data
 
   # Download all mods
   for modUrl in $(jq -r '.modUrls[]' "$packInfoPath"); do
