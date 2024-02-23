@@ -1,13 +1,5 @@
 #!/bin/bash
 
-function downloadMods() {
-  mod_list=$(jq -r '.files[] | "\(.projectID):\(.fileID)"' "$1")
-  for key in "${mod_list[@]}"; do
-   IFS=':' read -r projectID fileID <<< "$key"
-   curl
-  done
-}
-
 set -x
 
 cd /data

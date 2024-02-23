@@ -33,6 +33,7 @@ RUN apt-get update && apt-get install -y curl unzip jq && \
 COPY --from=builder /pack-info.json /pack-info.json
 COPY launch.sh /data/launch.sh
 RUN chmod +x /data/launch.sh
+RUN chown minecraft /data
 
 USER minecraft
 
