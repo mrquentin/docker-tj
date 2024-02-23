@@ -12,7 +12,7 @@ set -x
 
 cd /data
 
-packInfoPath="./pack-info.json"
+packInfoPath="/pack-info.json"
 packUrl=$(jq -r .packUrl "$packInfoPath")
 forgeUrl=$(jq -r .forgeUrl "$packInfoPath")
 forgeVersion=$(jq -r .forgeVersion "$packInfoPath")

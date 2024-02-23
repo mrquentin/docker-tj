@@ -9,7 +9,6 @@ packInfoFile="/pack-info.json"
 jq -n '{ }' > "$packInfoFile"
 
 # Get pack manifest
-echo "$CURSE_TOKEN"
 filesList=$(curl -H "x-api-key: $CURSE_TOKEN" "https://api.curseforge.com/v1/mods/$PROJECT_ID/files")
 packUrl=$(echo "$filesList" | jq -r --arg version "$PROJECT_VERSION" '.data[] | select(.fileName | contains($version)) | .downloadUrl')
 jq --arg packUrl "$packUrl" '.packUrl = $packUrl' "$packInfoFile" > tmp.json && mv tmp.json "$packInfoFile"
