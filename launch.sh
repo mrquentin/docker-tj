@@ -1,11 +1,21 @@
 #!/bin/bash
 
+function downloadMods() {
+  mod_list=$(jq -r '.files[] | "\(.projectID):\(.fileID)"' "$1")
+  for key in "${mod_list[@]}"; do
+   IFS=':' read -r projectID fileID <<< "$key"
+   curl
+  done
+}
+
 set -x
 
 cd /data
 
-minecraft_version=""
-forge_version=""
+packInfoPath="./pack-info.json"
+packUrl=$(jq -r .packUrl "$packInfoPath")
+forgeUrl=$(jq -r .forgeUrl "$packInfoPath")
+forgeVersion=$(jq -r .forgeVersion "$packInfoPath")
 
 if ! [[ "$EULA" = "false" ]]; then
   echo "eula=true" > eula.txt
@@ -15,14 +25,19 @@ else
 fi
 
 if ! [[ -f "Server-Files-$PROJECT_VERSION.zip" ]]; then
-  rm -fr rm -fr config defaultconfigs resources libraries kubejs scripts tmp mods packmenu Server*.zip forge*
-  curl -Lo "Server-Files-$PROJECT_VERSION.zip" "$(jq -r '.downloadUrl' /pack-info.json)" || exit 9
-  unzip -u -o "Server-Files-$PROJECT_VERSION.zip" -d /data/tmp
-  mv -r /data/tmp/overrides/* /data/ # extract pack data
-  minecraft_version=$(jq -r '.minecraft.version' /data/tmp/manifest.json)
-  forge_version="${minecraft_version}-$(jq -r '.minecraft.modLoaders[] | select(.id | contains("forge")) | .id' /data/tmp/manifest.json | awk -F"-" '{print $2}')"
-  curl -Lo "forge-${forge_version}-installer.jar" "http://files.minecraftforge.net/maven/net/minecraftforge/forge/${forge_version}/forge-${forge_version}-installer.jar"
-  java -jar "forge-${forge_version}-installer.jar" --installServer
+  # Get and install Forge
+  curl -Lo "forge-${forgeVersion}-installer.jar" "$forgeUrl"
+  java -jar "forge-${forgeVersion}-installer.jar" --installServer
+
+  # Get pack files
+  rm -fr rm config resources libraries scripts tmp mods Server*.zip forge*
+  curl -Lo "Server-Files-$PROJECT_VERSION.zip" "$packUrl" || exit 9
+  unzip -u -o "Server-Files-$PROJECT_VERSION.zip" -d /data
+
+  # Download all mods
+  for modUrl in $(jq -r '.modUrls[]' "$packInfoPath"); do
+    curl -L "$modUrl" -o "./mods/${modUrl##*/}";
+  done
 fi
 
-java $JVM_OPTS -jar "forge-${forge_version}.jar" --nogui
+java $JVM_OPTS -jar "forge-${forgeVersion}.jar" --nogui

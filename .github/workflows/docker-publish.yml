@@ -40,11 +40,6 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y curl jq
 
-      - name: Set variables
-        run: |
-          echo "PROJECT_ID=$(cat project-info.json | jq -r '.projectId')" >> $GITHUB_ENV
-          echo "PROJECT_VERSION=$(cat project-info.json | jq -r '.projectVersion')" >> $GITHUB_ENV
-
       # Install the cosign tool except on PR
       # https://github.com/sigstore/cosign-installer
       - name: Install cosign
@@ -77,10 +72,6 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
-      - name: Get Server File infos
-        run: |
-          curl -H "x-api-key: $API_KEY" "https://api.curseforge.com/v1/mods/$PROJECT_ID/files" | jq -r --arg version "$PROJECT_VERSION" '.data[] | select(.fileName | contains($version)) | {downloadUrl}' > pack-info.json
-
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action
       - name: Build and push Docker image
@@ -94,7 +85,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
-            PROJECT_VERSION=${{env.PROJECT_VERSION}}
+            CURSE_TOKEN=${{env.API_KEY}}
 
       # Sign the resulting Docker image digest except on PRs.
       # This will only write to the public Rekor transparency log when the Docker
