@@ -3,7 +3,7 @@
 # Global variables
 packFileName="pack.zip"
 manifestFile="manifest.json"
-packInfoFile="pack-info.json"
+packInfoFile="/pack-info.json"
 
 # Create output file
 jq -n '{ }' > "$packInfoFile"
