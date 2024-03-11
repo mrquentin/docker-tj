@@ -35,4 +35,4 @@ if ! [[ -f "Server-Files-$PROJECT_VERSION.zip" ]]; then
   done
 fi
 
-java $JVM_OPTS -jar "forge-${forgeVersion}.jar" --nogui
+screen -dmS MCServer java $JVM_OPTS -jar "forge-${forgeVersion}.jar" --nogui
