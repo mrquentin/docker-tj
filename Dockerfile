@@ -27,7 +27,7 @@ ARG PROJECT_VERSION
 
 LABEL version=$PROJECT_VERSION
 
-RUN apt-get update && apt-get install -y curl unzip jq && \
+RUN apt-get update && apt-get install -y curl unzip jq screen && \
  adduser --uid 99 --gid 100 --home /data --disabled-password minecraft
 
 COPY --from=builder /pack-info.json /pack-info.json
